@@ -36,6 +36,10 @@ body {
   transition: 0.5s;
 }
 
+.button:active {
+  filter: brightness(200%);
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -60,4 +64,31 @@ body {
 
 .route {
   align-self: center;
+}
+
+.params {
+  text-align: center;
+}
+
+select {
+  border-radius: 0.5em;
+  font: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  margin-left: 0.1em;
+  cursor: pointer;
+}
+
+.select-item {
+  background-color: rgb(131, 21, 134);
+  color: #fff;
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  gap: 1em;
+  justify-content: space-between;
 }

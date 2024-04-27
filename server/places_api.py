@@ -19,10 +19,10 @@ def get_place_id(name):
         return None
 
 
-def get_attractions(lon, lat, r=2000, n=20, categories=('tourism',)):
+def get_attractions(lon, lat, n, categories, r):
     url = "https://api.geoapify.com/v2/places"
     params = dict(
-        categories=','.join(categories),
+        categories=categories,
         filter=f'circle:{lon},{lat},{r}',
         limit=n,
         apiKey=API_KEY
@@ -33,10 +33,15 @@ def get_attractions(lon, lat, r=2000, n=20, categories=('tourism',)):
         data = response.json()['features']
         places = []
         for item in data:
-            place = {
-                'name': item['properties']['name'],
-                'coords': item['geometry']['coordinates'][::-1]
-            }
+            place = {}
+            try:
+                place['name'] = item['properties']['name']
+            except:
+                pass
+            try:
+                place['coords'] = item['geometry']['coordinates'][::-1]
+            except:
+                pass
             places.append(place)
         return places
     except Exception as e:

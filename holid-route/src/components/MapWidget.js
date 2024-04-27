@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 
 async function getPlaces(lon, lat, n, categories) {
   let url = "http://192.168.1.62:3001";
-  url += `/places?lon=${lon}&lat=${lat}&n=${n}&categories=${categories.join()}`;
+  url += `/places?lon=${lon}&lat=${lat}&n=${n}&categories=${categories.join()}&r=${2000}`;
   const respnose = await fetch(url, { mode: "cors" });
   return await respnose.json();
 }
 
-const MapWidget = () => {
+const MapWidget = ({ showRoute, routeType, categories }) => {
   const [places, setPlaces] = useState([]);
   const [position, setPosition] = useState({ latitude: null, longitude: null });
 
@@ -18,14 +18,17 @@ const MapWidget = () => {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
-        getPlaces(position.coords.longitude, position.coords.latitude, 20, [
-          "tourism",
-        ]).then((data) => setPlaces(data));
+        getPlaces(
+          position.coords.longitude,
+          position.coords.latitude,
+          20,
+          categories
+        ).then((data) => setPlaces(data));
       });
     } else {
       console.log("Geolocation is not available in your browser.");
     }
-  }, []);
+  }, [categories]);
 
   useEffect(() => {
     if (window.ymaps) {
@@ -36,33 +39,35 @@ const MapWidget = () => {
 
         const map = new window.ymaps.Map("map", {
           center: [position.latitude, position.longitude],
-          zoom: 10,
+          zoom: 13,
         });
 
         const routeCoordinates = [];
+
         for (const point of places) {
           routeCoordinates.push(point.coords);
         }
 
-        // Create a route
-        var route = new window.ymaps.multiRouter.MultiRoute(
-          {
-            // Описание опорных точек мультимаршрута.
-            referencePoints: routeCoordinates,
-            // Параметры маршрутизации.
-            params: {
-              // Ограничение на максимальное количество маршрутов, возвращаемое маршрутизатором.
-              results: 2,
+        if (showRoute) {
+          // Create a route
+          var route = new window.ymaps.multiRouter.MultiRoute(
+            {
+              // Описание опорных точек мультимаршрута.
+              referencePoints: routeCoordinates,
+              // Параметры маршрутизации.
+              params: {
+                // Ограничение на максимальное количество маршрутов, возвращаемое маршрутизатором.
+                results: 2,
+                routingMode: routeType,
+              },
             },
-          },
-          {
-            // Автоматически устанавливать границы карты так, чтобы маршрут был виден целиком.
-            boundsAutoApply: true,
-            balloonLayout: window.ymaps.templateLayoutFactory.createClass('<div></div>')
-          }
-        );
+            {
+              boundsAutoApply: true,
+            }
+          );
 
-        map.geoObjects.add(route);
+          map.geoObjects.add(route);
+        }
 
         for (const place of places) {
           const marker = new window.ymaps.Placemark(place.coords, {
@@ -79,7 +84,7 @@ const MapWidget = () => {
         map.geoObjects.add(current);
       });
     }
-  }, [position, places]);
+  }, [position, places, showRoute, routeType]);
 
   return <div id="map"></div>;
 };

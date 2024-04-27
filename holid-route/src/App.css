@@ -96,3 +96,8 @@ select {
   gap: 1em;
   justify-content: space-between;
 }
+
+.routes {
+  display: flex;
+  gap: 1em;
+}

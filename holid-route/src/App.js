@@ -7,13 +7,7 @@ import route from "./icons/route.png";
 import MapWidget from "./components/MapWidget.js";
 import { useState } from "react";
 
-const routeTypes = {
-  Пеший: "pedestrian",
-  Автомобильный: "auto",
-  "Общественный транспорт": "masstransit",
-  Велосипед: "bicycle",
-  Такси: "taxi",
-};
+const routeTypes = ["pedestrian", "auto", "masstransit", "bicycle", "taxi"];
 
 const allCategories = {
   accommodation: "размещение",
@@ -66,60 +60,21 @@ function App() {
   let footer = <div></div>;
   if (showMain) {
     footer = (
-      <div className="bg-rect route" onClick={() => setShowRoute(!showRoute)}>
-        <img className="button" src={route}></img>
+      <div className="routes">
+        <div className="bg-rect" onClick={() => setShowRoute(!showRoute)}>
+          <img className="button" src={route}></img>
+        </div>
+        {routeTypes.map((routeType) => (
+          <div className="bg-rect" onClick={() => setRouteType(routeType)}>
+            <img className="button" src={route}></img>
+          </div>
+        ))}
       </div>
     );
   } else if (showParams) {
-    footer = (
-      <div className={"params bg-rect"}>
-        <label>
-          {"Тип маршрута: "}
-          <br></br>
-
-          <select
-            name="route-type"
-            defaultValue={routeType}
-            onChange={(event) => {
-              setRouteType(event.target.value);
-            }}
-          >
-            {Object.keys(routeTypes).map((option) => (
-              <option
-                key={routeTypes[option]}
-                value={routeTypes[option]}
-                className="select-item"
-              >
-                {option}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-    );
+    footer = <div></div>
   } else if (showCategories) {
-    footer = (
-      <div className={"params bg-rect"}>
-        <label>
-          {"Категория: "}
-          <br></br>
-
-          <select
-            name="categories"
-            defaultValue={categories[0]}
-            onChange={(event) => {
-              setCategories([event.target.value]);
-            }}
-          >
-            {Object.keys(allCategories).map((en) => (
-              <option key={en} value={en} className="select-item">
-                {allCategories[en]}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-    );
+    footer = <div></div>;
   }
 
   return (

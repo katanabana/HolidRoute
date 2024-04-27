@@ -1,0 +1,63 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #151618;
+  color: white;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 1em;
+}
+
+.bg-rect {
+  background-color: rgba(255, 255, 255, 0.107);
+  padding: 1em;
+  border-radius: 2em;
+}
+
+.button {
+  width: 3em;
+  aspect-ratio: 1;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.button:hover {
+  scale: 1.2;
+  transition: 0.5s;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-header {
+  display: flex;
+  gap: 1em;
+}
+
+.map {
+  flex-grow: 1;
+}
+
+
+#map {
+  border-radius: 1em;
+  height: 100%;
+}
+
+.ymaps-2-1-79-map {
+  border-radius: 2em; /* Adjust the value as needed */
+  overflow: hidden; /* Ensure that the border-radius is applied */
+}
+
+.route {
+  align-self: center;
+}

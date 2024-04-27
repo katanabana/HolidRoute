@@ -1,6 +1,6 @@
 import "./App.css";
-import map from "./icons/map.png";
-import profile from "./icons/profile.png";
+import map from "./icons/route.png";
+import profile from "./icons/params.png";
 import noRouteIcon from "./icons/close.png";
 import pedestrianIcon from "./icons/walk.png";
 import carIcon from "./icons/car.png";
@@ -64,7 +64,7 @@ function App() {
   } else if (showParams) {
     footer = (
       <div className="bg-rect params">
-        <textarea></textarea>
+        <textarea placeholder="Введите ваши пожелания к прогулке"></textarea>
       </div>
     );
   }

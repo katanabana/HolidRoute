@@ -67,6 +67,8 @@ const MapWidget = ({ showRoute, routeType }) => {
             },
             {
               boundsAutoApply: true,
+              wayPointVisible: false,
+              hideIconOnBaloonOpen: false,
             }
           );
 

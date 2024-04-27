@@ -21,9 +21,7 @@ function App() {
         </div>
       </div>
 
-      <div className="bg-rect map">
-        <MapWidget></MapWidget>
-      </div>
+      <MapWidget></MapWidget>
 
       <div className="bg-rect route">
         <img className="button" src={route}></img>

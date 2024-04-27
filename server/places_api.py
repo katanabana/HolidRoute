@@ -19,11 +19,11 @@ def get_place_id(name):
         return None
 
 
-def get_attractions(place_name, n=5, categories=('tourism',)):
+def get_attractions(lon, lat, r=2000, n=20, categories=('tourism',)):
     url = "https://api.geoapify.com/v2/places"
     params = dict(
         categories=','.join(categories),
-        filter=f'place:{get_place_id(place_name)}',
+        filter=f'circle:{lon},{lat},{r}',
         limit=n,
         apiKey=API_KEY
     )
@@ -34,15 +34,11 @@ def get_attractions(place_name, n=5, categories=('tourism',)):
         places = []
         for item in data:
             place = {
-                'working_hours': '',
-                'coordinates': item['geometry']['coordinates']
+                'name': item['properties']['name'],
+                'coords': item['geometry']['coordinates'][::-1]
             }
             places.append(place)
+        return places
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
-
-
-from pprint import pprint
-
-pprint(get_attractions('Yekaterinburg'))

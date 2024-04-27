@@ -5,6 +5,8 @@
 body {
   background-color: #151618;
   color: white;
+  display: flex;
+  justify-content: center;
 }
 
 #root {
@@ -13,6 +15,7 @@ body {
   flex-direction: column;
   gap: 1em;
   padding: 1em;
+  align-items: center;
 }
 
 .bg-rect {
@@ -36,6 +39,7 @@ body {
 .header {
   display: flex;
   justify-content: space-between;
+  gap: 1em;
 }
 
 .main-header {
@@ -43,14 +47,10 @@ body {
   gap: 1em;
 }
 
-.map {
-  flex-grow: 1;
-}
-
-
 #map {
+  flex-grow: 1;
   border-radius: 1em;
-  height: 100%;
+  width: 100%;
 }
 
 .ymaps-2-1-79-map {

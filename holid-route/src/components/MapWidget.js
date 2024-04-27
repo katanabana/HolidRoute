@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 
+async function getPlaces(lon, lat, n, categories) {
+  let url = "http://192.168.1.62:3001";
+  url += `/places?lon=${lon}&lat=${lat}&n=${n}&categories=${categories.join()}`;
+  const respnose = await fetch(url, { mode: "cors" });
+  return await respnose.json();
+}
+
 const MapWidget = () => {
+  const [places, setPlaces] = useState([]);
   const [position, setPosition] = useState({ latitude: null, longitude: null });
 
   useEffect(() => {
@@ -10,6 +18,9 @@ const MapWidget = () => {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
+        getPlaces(position.coords.longitude, position.coords.latitude, 20, [
+          "tourism",
+        ]).then((data) => setPlaces(data));
       });
     } else {
       console.log("Geolocation is not available in your browser.");
@@ -28,39 +39,47 @@ const MapWidget = () => {
           zoom: 10,
         });
 
-        const route = [];
-        for (const point in route) {
-          const marker = new window.ymaps.Placemark(point.coords, {
-            hintContent: point.name, // Tooltip text
+        const routeCoordinates = [];
+        for (const point of places) {
+          routeCoordinates.push(point.coords);
+        }
+
+        // Create a route
+        var route = new window.ymaps.multiRouter.MultiRoute(
+          {
+            // Описание опорных точек мультимаршрута.
+            referencePoints: routeCoordinates,
+            // Параметры маршрутизации.
+            params: {
+              // Ограничение на максимальное количество маршрутов, возвращаемое маршрутизатором.
+              results: 2,
+            },
+          },
+          {
+            // Автоматически устанавливать границы карты так, чтобы маршрут был виден целиком.
+            boundsAutoApply: true,
+            balloonLayout: window.ymaps.templateLayoutFactory.createClass('<div></div>')
+          }
+        );
+
+        map.geoObjects.add(route);
+
+        for (const place of places) {
+          const marker = new window.ymaps.Placemark(place.coords, {
+            hintContent: place.name,
           });
 
           map.geoObjects.add(marker);
         }
 
-        window.ymaps
-          .route([
-            [55.751574, 37.573856],
-            [55.755773, 37.617761],
-            [position.latitude, position.longitude],
-          ])
-          .then(
-            function (route) {
-              // Add route to the map
-              map.geoObjects.add(route);
-            },
-            function (error) {
-              console.error("Failed to build route:", error.message);
-            }
-          );
-
-        const marker = new window.ymaps.Placemark(map.getCenter(), {
+        const current = new window.ymaps.Placemark(map.getCenter(), {
           hintContent: "Вы здесь", // Tooltip text
         });
 
-        map.geoObjects.add(marker);
+        map.geoObjects.add(current);
       });
     }
-  }, [position]);
+  }, [position, places]);
 
   return <div id="map"></div>;
 };

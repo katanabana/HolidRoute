@@ -77,7 +77,9 @@ const MapWidget = ({ showRoute, routeType }) => {
 
         for (const place of places) {
           const marker = new window.ymaps.Placemark(place.coordinates, {
-            hintContent: place.name,
+            hintContent:
+              (place.name ? place.name + " " : "") +
+              (place.categories ? `(${place.categories.join()})` : ""),
           });
 
           map.geoObjects.add(marker);

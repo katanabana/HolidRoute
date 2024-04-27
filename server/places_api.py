@@ -3,8 +3,30 @@ import requests
 from concurrent.futures import ThreadPoolExecutor
 
 API_KEY = 'd548c5ed24604be6a9dd0d989631f783'
-CATEGORIES = ['activity', 'airport', 'beach', 'camping', 'catering', 'education', 'entertainment', 'healthcare', 'leisure', 'low_emission_zone', 'man_made',
-              'national_park', 'natural', 'office', 'parking', 'pet', 'political', 'populated_place', 'power', 'production', 'religion', 'rental', 'service', 'ski', 'sport', 'tourism']
+CATEGORIES = dict(
+    activity="деятельность",
+    airport="аэропорт",
+    beach="пляж",
+    camping="кемпинг",
+    catering="общественное питание",
+    entertainment="развлекательное",
+    healthcare="здравоохранение",
+    leisure="досуг",
+    low_emission_zone="зона низкой эмиссии",
+    man_made="рукотворный",
+    national_park="национальный_парк",
+    natural="природные",
+    pet="домашнее животное",
+    political="политика",
+    power="энергетика",
+    production="производство",
+    railway="железная дорога",
+    religion="религия",
+    ski="лыжи",
+    sport="спорт ",
+    tourism="туризм",
+
+)
 
 
 def get_places_by_params(params):
@@ -19,7 +41,7 @@ def get_places_by_params(params):
             keys_to_getters = {
                 'name': lambda: item['properties']['name'],
                 'coordinates': lambda: item['geometry']['coordinates'][::-1],
-                'categories': lambda: item['properties']['categories']
+                'categories': lambda: list(set([CATEGORIES[en.split('.')[0]] for en in item['properties']['categories']]))
             }
             place = {}
             for (key, get_value) in keys_to_getters.items():
@@ -39,7 +61,7 @@ def get_places(lon, lat):
     n = 9
     for i in range(0, len(CATEGORIES), n):
         params = dict(
-            categories=CATEGORIES[i:i+n],
+            categories=list(CATEGORIES.keys())[i:i+n],
             filter=f'circle:{lon},{lat},50000',
             limit=n * 3,
             apiKey=API_KEY,

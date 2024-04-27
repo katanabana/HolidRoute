@@ -48,6 +48,22 @@ const MapWidget = ({ showRoute, routeType, categories }) => {
           routeCoordinates.push(point.coords);
         }
 
+        // Create a route
+        var route = new window.ymaps.multiRouter.MultiRoute(
+          {
+            // Описание опорных точек мультимаршрута.
+            referencePoints: routeCoordinates,
+            // Параметры маршрутизации.
+            params: {
+              // Ограничение на максимальное количество маршрутов, возвращаемое маршрутизатором.
+              results: 1,
+            },
+          },
+          {
+            // Автоматически устанавливать границы карты так, чтобы маршрут был виден целиком.
+            boundsAutoApply: true,
+          }
+        );
         if (showRoute) {
           // Create a route
           var route = new window.ymaps.multiRouter.MultiRoute(
@@ -77,9 +93,16 @@ const MapWidget = ({ showRoute, routeType, categories }) => {
           map.geoObjects.add(marker);
         }
 
-        const current = new window.ymaps.Placemark(map.getCenter(), {
-          hintContent: "Вы здесь", // Tooltip text
-        });
+        const current = new window.ymaps.Placemark(
+          map.getCenter(),
+          {
+            balloonContent: "Вы <strong>здесь</strong>",
+          },
+          {
+            preset: "islands#governmentCircleIcon",
+            iconColor: "#3b5998",
+          }
+        );
 
         map.geoObjects.add(current);
       });

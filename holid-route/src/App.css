@@ -95,9 +95,30 @@ select {
   display: flex;
   gap: 1em;
   justify-content: space-between;
+  flex-grow: 1;
 }
 
 .routes {
   display: flex;
   gap: 1em;
+}
+
+textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none; /*remove the resize handle on the bottom right*/
+  background-color: transparent;
+  caret-color: white;
+  color: white;
+  width: 100%;
+}
+
+.params {
+  width: 100%;
 }

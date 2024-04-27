@@ -1,8 +1,6 @@
 import "./App.css";
 import map from "./icons/map.png";
-import pinIcon from "./icons/pin.png";
 import profile from "./icons/profile.png";
-import settings from "./icons/settings.png";
 import noRouteIcon from "./icons/close.png";
 import pedestrianIcon from "./icons/walk.png";
 import carIcon from "./icons/car.png";
@@ -14,11 +12,9 @@ import { useState } from "react";
 function App() {
   const [showRoute, setShowRoute] = useState(false);
   const [routeType, setRouteType] = useState("pedestrian");
-  const [categories, setCategories] = useState(["tourism"]);
 
   const [showMain, setShowMain] = useState(true);
   const [showParams, setShowParams] = useState(false);
-  const [showCategories, setShowCategories] = useState(false);
 
   let footer = <div></div>;
   if (showMain) {
@@ -66,9 +62,11 @@ function App() {
       </div>
     );
   } else if (showParams) {
-    footer = <div></div>;
-  } else if (showCategories) {
-    footer = <div></div>;
+    footer = (
+      <div className="bg-rect params">
+        <textarea></textarea>
+      </div>
+    );
   }
 
   return (
@@ -82,17 +80,6 @@ function App() {
             onClick={() => {
               setShowMain(true);
               setShowParams(false);
-              setShowCategories(false);
-            }}
-          ></img>
-
-          <img
-            className="button"
-            src={pinIcon}
-            onClick={() => {
-              setShowMain(false);
-              setShowParams(true);
-              setShowCategories(false);
             }}
           ></img>
 
@@ -101,22 +88,13 @@ function App() {
             src={profile}
             onClick={() => {
               setShowMain(false);
-              setShowParams(false);
-              setShowCategories(true);
+              setShowParams(true);
             }}
           ></img>
         </div>
-
-        <div className="bg-rect">
-          <img className="button" src={settings}></img>
-        </div>
       </div>
 
-      <MapWidget
-        showRoute={showRoute}
-        routeType={routeType}
-        categories={categories}
-      ></MapWidget>
+      <MapWidget showRoute={showRoute} routeType={routeType}></MapWidget>
 
       {footer}
     </>

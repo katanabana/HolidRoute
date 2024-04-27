@@ -96,7 +96,7 @@ const MapWidget = ({ showRoute, routeType, categories }) => {
         const current = new window.ymaps.Placemark(
           map.getCenter(),
           {
-            balloonContent: "Вы <strong>здесь</strong>",
+            hintContent: "Вы здесь"
           },
           {
             preset: "islands#governmentCircleIcon",

@@ -9,45 +9,6 @@ import { useState } from "react";
 
 const routeTypes = ["pedestrian", "auto", "masstransit", "bicycle", "taxi"];
 
-const allCategories = {
-  accommodation: "размещение",
-  activity: "деятельность",
-  administrative: "административный",
-  airport: "аэропорт",
-  amenity: "удобства",
-  beach: "пляж",
-  building: "здание",
-  camping: "кемпинг",
-  catering: "общественное питание",
-  childcare: "уход за детьми",
-  commercial: "коммерческое",
-  education: "образовательное",
-  entertainment: "развлекательное",
-  healthcare: "здравоохранение",
-  highway: "шоссе",
-  leisure: "досуг",
-  low_emission_zone: "зона низкой эмиссии",
-  man_made: "рукотворный",
-  national_park: "национальный_парк",
-  natural: "природные",
-  office: "офис",
-  parking: "парковка",
-  pet: "домашнее животное",
-  political: "политика",
-  populated_place: "населенный пункт",
-  postal_code: "почтовый индекс",
-  power: "энергетика",
-  production: "производство",
-  public_transport: "общественный транспорт",
-  railway: "железная дорога",
-  religion: "религия",
-  rental: "прокат",
-  service: "сервис",
-  ski: "лыжи",
-  sport: "спорт ",
-  tourism: "туризм",
-};
-
 function App() {
   const [showRoute, setShowRoute] = useState(false);
   const [routeType, setRouteType] = useState("pedestrian");
@@ -72,7 +33,7 @@ function App() {
       </div>
     );
   } else if (showParams) {
-    footer = <div></div>
+    footer = <div></div>;
   } else if (showCategories) {
     footer = <div></div>;
   }

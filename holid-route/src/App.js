@@ -1,13 +1,17 @@
 import "./App.css";
 import map from "./icons/map.png";
-import params from "./icons/params.png";
+import pinIcon from "./icons/pin.png";
 import profile from "./icons/profile.png";
 import settings from "./icons/settings.png";
-import route from "./icons/route.png";
+import noRouteIcon from "./icons/close.png";
+import pedestrianIcon from "./icons/walk.png";
+import carIcon from "./icons/car.png";
+import busIcon from "./icons/bus.png";
+import bicycleIcon from "./icons/bicycle.png";
 import MapWidget from "./components/MapWidget.js";
 import { useState } from "react";
 
-const routeTypes = ["pedestrian", "auto", "masstransit", "bicycle", "taxi"];
+const routeTypes = ["pedestrian", "auto", "masstransit", "bicycle"];
 
 const allCategories = {
   accommodation: "размещение",
@@ -61,18 +65,25 @@ function App() {
   if (showMain) {
     footer = (
       <div className="routes">
-        <div className="bg-rect" onClick={() => setShowRoute(!showRoute)}>
-          <img className="button" src={route}></img>
+        <div className="bg-rect" onClick={() => setRouteType("pedestrian")}>
+          <img className="button" src={pedestrianIcon}></img>
         </div>
-        {routeTypes.map((routeType) => (
-          <div className="bg-rect" onClick={() => setRouteType(routeType)}>
-            <img className="button" src={route}></img>
-          </div>
-        ))}
+        <div className="bg-rect" onClick={() => setRouteType("auto")}>
+          <img className="button" src={carIcon}></img>
+        </div>
+        <div className="bg-rect" onClick={() => setRouteType("masstransit")}>
+          <img className="button" src={busIcon}></img>
+        </div>
+        <div className="bg-rect" onClick={() => setRouteType("bicycle")}>
+          <img className="button" src={bicycleIcon}></img>
+        </div>
+        <div className="bg-rect" onClick={() => setShowRoute(!showRoute)}>
+          <img className="button" src={noRouteIcon}></img>
+        </div>
       </div>
     );
   } else if (showParams) {
-    footer = <div></div>
+    footer = <div></div>;
   } else if (showCategories) {
     footer = <div></div>;
   }
@@ -94,7 +105,7 @@ function App() {
 
           <img
             className="button"
-            src={params}
+            src={pinIcon}
             onClick={() => {
               setShowMain(false);
               setShowParams(true);

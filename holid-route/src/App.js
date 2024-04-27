@@ -11,8 +11,6 @@ import bicycleIcon from "./icons/bicycle.png";
 import MapWidget from "./components/MapWidget.js";
 import { useState } from "react";
 
-const routeTypes = ["pedestrian", "auto", "masstransit", "bicycle"];
-
 function App() {
   const [showRoute, setShowRoute] = useState(false);
   const [routeType, setRouteType] = useState("pedestrian");
@@ -26,19 +24,43 @@ function App() {
   if (showMain) {
     footer = (
       <div className="routes">
-        <div className="bg-rect" onClick={() => setRouteType("pedestrian")}>
+        <div
+          className="bg-rect"
+          onClick={() => {
+            setRouteType("pedestrian");
+            setShowRoute(true);
+          }}
+        >
           <img className="button" src={pedestrianIcon}></img>
         </div>
-        <div className="bg-rect" onClick={() => setRouteType("auto")}>
+        <div
+          className="bg-rect"
+          onClick={() => {
+            setRouteType("auto");
+            setShowRoute(true);
+          }}
+        >
           <img className="button" src={carIcon}></img>
         </div>
-        <div className="bg-rect" onClick={() => setRouteType("masstransit")}>
+        <div
+          className="bg-rect"
+          onClick={() => {
+            setRouteType("masstransit");
+            setShowRoute(true);
+          }}
+        >
           <img className="button" src={busIcon}></img>
         </div>
-        <div className="bg-rect" onClick={() => setRouteType("bicycle")}>
+        <div
+          className="bg-rect"
+          onClick={() => {
+            setRouteType("bicycle");
+            setShowRoute(true);
+          }}
+        >
           <img className="button" src={bicycleIcon}></img>
         </div>
-        <div className="bg-rect" onClick={() => setShowRoute(!showRoute)}>
+        <div className="bg-rect" onClick={() => setShowRoute(false)}>
           <img className="button" src={noRouteIcon}></img>
         </div>
       </div>

@@ -52,13 +52,12 @@ const MapWidget = () => {
             // Параметры маршрутизации.
             params: {
               // Ограничение на максимальное количество маршрутов, возвращаемое маршрутизатором.
-              results: 2,
+              results: 1,
             },
           },
           {
             // Автоматически устанавливать границы карты так, чтобы маршрут был виден целиком.
             boundsAutoApply: true,
-            balloonLayout: window.ymaps.templateLayoutFactory.createClass('<div></div>')
           }
         );
 
@@ -72,9 +71,16 @@ const MapWidget = () => {
           map.geoObjects.add(marker);
         }
 
-        const current = new window.ymaps.Placemark(map.getCenter(), {
-          hintContent: "Вы здесь", // Tooltip text
-        });
+        const current = new window.ymaps.Placemark(
+          map.getCenter(),
+          {
+            balloonContent: "Вы <strong>здесь</strong>",
+          },
+          {
+            preset: "islands#governmentCircleIcon",
+            iconColor: "#3b5998",
+          }
+        );
 
         map.geoObjects.add(current);
       });

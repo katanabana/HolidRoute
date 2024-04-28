@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import loaderIcon from "../icons/loader.png";
 
-async function getPlaces(lon, lat, userDescription) {
+async function getPlaces(lon, lat, userDescription, setLoading) {
   let url = "http://localhost:3001";
   url += `/places?lon=${lon}&lat=${lat}&user_description=${userDescription}`;
   const respnose = await fetch(url, { mode: "cors" });
@@ -10,12 +11,9 @@ async function getPlaces(lon, lat, userDescription) {
 const MapWidget = ({ showRoute, routeType, userDescription }) => {
   const [places, setPlaces] = useState([]);
   const [position, setPosition] = useState({ latitude: 0, longitude: 0 });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!userDescription) {
-      setPlaces([])
-      return
-    }
     if (
       "geolocation" in navigator &&
       ["complete", "interactive"].includes(document.readyState)
@@ -25,11 +23,19 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
-        getPlaces(position.coords.longitude, position.coords.latitude, userDescription).then(
-          (data) => {
-            setPlaces(data.slice(0, 10));
-          }
-        );
+        if (!userDescription) {
+          setPlaces([]);
+          return;
+        }
+        setLoading(true);
+        getPlaces(
+          position.coords.longitude,
+          position.coords.latitude,
+          userDescription
+        ).then((data) => {
+          setPlaces(data.slice(0, 10));
+          setLoading(false);
+        });
       });
     } else {
       console.log("Geolocation is not available in your browser.");
@@ -105,7 +111,17 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
     });
   }, [position, places, showRoute, routeType]);
 
-  return <div id="map"></div>;
+  return (
+    <>
+      <div id="map" className={loading ? " blur" : ""}>
+        {" "}
+        <img
+          className={"loader hiddable" + (loading ? "" : " hidden")}
+          src={loaderIcon}
+        ></img>
+      </div>{" "}
+    </>
+  );
 };
 
 export default MapWidget;

@@ -64,7 +64,7 @@ def get_places(lon, lat, user_description):
         params = dict(
             categories=','.join(list(CATEGORIES.keys())[i:i+n]),
             filter=f'circle:{lon},{lat},50000',
-            limit=n * 3 if user_description else n * 1,
+            limit=n * 10 if user_description else n * 1,
             apiKey=API_KEY,
             bias=f'proximity:{lon},{lat}'
         )

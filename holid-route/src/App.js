@@ -8,7 +8,7 @@ import busIcon from "./icons/bus.png";
 import bicycleIcon from "./icons/bicycle.png";
 import sendIcon from "./icons/send.png";
 import MapWidget from "./components/MapWidget.js";
-import { useDebugValue, useState } from "react";
+import { useState } from "react";
 
 function App() {
   const [showRoute, setShowRoute] = useState(false);
@@ -18,15 +18,18 @@ function App() {
     currentUserDescription
   );
 
-  const [showMain, setShowMain] = useState(true);
-  const [showParams, setShowParams] = useState(false);
+  const [showMain, setShowMain] = useState(false);
+  const [showParams, setShowParams] = useState(true);
 
   let footer = <div></div>;
   if (showMain) {
     footer = (
       <div className="routes">
         <div
-          className={"bg-rect" + ((routeType === "pedestrian" && showRoute)? " -opacity-50" : "")}
+          className={
+            "bg-rect" +
+            (routeType === "pedestrian" && showRoute ? " -opacity-50" : "")
+          }
           onClick={() => {
             setRouteType("pedestrian");
             setShowRoute(true);
@@ -35,7 +38,10 @@ function App() {
           <img className="button" src={pedestrianIcon}></img>
         </div>
         <div
-          className={"bg-rect" + ((routeType === "auto" && showRoute)? " -opacity-50" : "")}
+          className={
+            "bg-rect" +
+            (routeType === "auto" && showRoute ? " -opacity-50" : "")
+          }
           onClick={() => {
             setRouteType("auto");
             setShowRoute(true);
@@ -44,7 +50,10 @@ function App() {
           <img className="button" src={carIcon}></img>
         </div>
         <div
-          className={"bg-rect" + ((routeType === "masstransit" && showRoute)? " -opacity-50" : "")}
+          className={
+            "bg-rect" +
+            (routeType === "masstransit" && showRoute ? " -opacity-50" : "")
+          }
           onClick={() => {
             setRouteType("masstransit");
             setShowRoute(true);
@@ -53,7 +62,10 @@ function App() {
           <img className="button" src={busIcon}></img>
         </div>
         <div
-          className={"bg-rect" + ((routeType === "bicycle" && showRoute)? " -opacity-50" : "")}
+          className={
+            "bg-rect" +
+            (routeType === "bicycle" && showRoute ? " -opacity-50" : "")
+          }
           onClick={() => {
             setRouteType("bicycle");
             setShowRoute(true);
@@ -61,7 +73,10 @@ function App() {
         >
           <img className="button" src={bicycleIcon}></img>
         </div>
-        <div className={"bg-rect" + ((!showRoute) ? " -opacity-50" : "")} onClick={() => setShowRoute(false)}>
+        <div
+          className={"bg-rect" + (!showRoute ? " -opacity-50" : "")}
+          onClick={() => setShowRoute(false)}
+        >
           <img className="button" src={noRouteIcon}></img>
         </div>
       </div>
@@ -71,6 +86,7 @@ function App() {
       <div className="-footer-div">
         <div className="bg-rect -text-area-div">
           <textarea
+            defaultValue={currentUserDescription}
             placeholder="Введите ваши пожелания к прогулке"
             onChange={(event) => setCurrentUserDescription(event.target.value)}
           ></textarea>
@@ -104,20 +120,19 @@ function App() {
       <div className="header">
         <div className="bg-rect main-header">
           <img
-            className={"button " + c1}
-            src={mapIcon}
-            onClick={() => {
-              setShowMain(true);
-              setShowParams(false);
-            }}
-          ></img>
-
-          <img
             className={"button " + c2}
-            src={routeIcon}
+            src={mapIcon}
             onClick={() => {
               setShowMain(false);
               setShowParams(true);
+            }}
+          ></img>
+          <img
+            className={"button " + c1}
+            src={routeIcon}
+            onClick={() => {
+              setShowMain(true);
+              setShowParams(false);
             }}
           ></img>
         </div>

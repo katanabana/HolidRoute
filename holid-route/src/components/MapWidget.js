@@ -14,10 +14,8 @@ async function getPlaces(lon, lat, userDescription) {
 
 const MapWidget = ({ showRoute, routeType, userDescription }) => {
   const [places, setPlaces] = useState([]);
-  const [position, setPosition] = useState({
-    latitude: 55.7558,
-    longitude: 37.6173,
-  });
+  const [latitude, setLatitude] = useState(55.7558);
+  const [longitude, setLongitude] = useState(37.6173);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -27,10 +25,8 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
     ) {
       navigator.geolocation.getCurrentPosition(function (position) {
         if (position.coords) {
-          setPosition({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
+          setLatitude(position.coords.latitude);
+          setLongitude(position.coords.longitude);
         }
       });
     }
@@ -39,12 +35,10 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
       return;
     }
     setLoading(true);
-    getPlaces(position.longitude, position.latitude, userDescription).then(
-      (data) => {
-        setPlaces(data.slice(0, 10));
-        setLoading(false);
-      }
-    );
+    getPlaces(longitude, latitude, userDescription).then((data) => {
+      setPlaces(data.slice(0, 10));
+      setLoading(false);
+    });
   }, [userDescription]);
 
   useEffect(() => {
@@ -55,7 +49,7 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
         }
 
         const map = new window.ymaps.Map("map", {
-          center: [position.latitude, position.longitude],
+          center: [latitude, longitude],
           zoom: 13,
         });
 
@@ -114,14 +108,7 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
         map.geoObjects.add(current);
       }
     });
-  }, [
-    position,
-    places,
-    showRoute,
-    routeType,
-    position.latitude,
-    position.longitude,
-  ]);
+  }, [places, showRoute, routeType, latitude, longitude]);
 
   return (
     <>

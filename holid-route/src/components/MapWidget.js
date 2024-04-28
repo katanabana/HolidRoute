@@ -112,9 +112,10 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
 
   return (
     <>
-      <div id="map" alt="img" className={loading ? " blur" : ""}>
+      <div id="map" className={loading ? " blur" : ""}>
         {" "}
         <img
+          alt="img"
           className={"loader hiddable" + (loading ? "" : " hidden")}
           src={loaderIcon}
         ></img>

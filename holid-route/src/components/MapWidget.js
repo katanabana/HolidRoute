@@ -39,7 +39,7 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
       setPlaces(data.slice(0, 10));
       setLoading(false);
     });
-  }, [userDescription]);
+  }, [userDescription, latitude, longitude]);
 
   useEffect(() => {
     window.ymaps.ready(() => {
@@ -112,7 +112,7 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
 
   return (
     <>
-      <div id="map" className={loading ? " blur" : ""}>
+      <div id="map" alt="img" className={loading ? " blur" : ""}>
         {" "}
         <img
           className={"loader hiddable" + (loading ? "" : " hidden")}

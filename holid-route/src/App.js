@@ -35,7 +35,7 @@ function App() {
             setShowRoute(true);
           }}
         >
-          <img className="button" src={pedestrianIcon}></img>
+          <img alt="img" className="button" src={pedestrianIcon}></img>
         </div>
         <div
           className={
@@ -47,7 +47,7 @@ function App() {
             setShowRoute(true);
           }}
         >
-          <img className="button" src={carIcon}></img>
+          <img alt="img" className="button" src={carIcon}></img>
         </div>
         <div
           className={
@@ -59,7 +59,7 @@ function App() {
             setShowRoute(true);
           }}
         >
-          <img className="button" src={busIcon}></img>
+          <img alt="img" className="button" src={busIcon}></img>
         </div>
         <div
           className={
@@ -71,13 +71,13 @@ function App() {
             setShowRoute(true);
           }}
         >
-          <img className="button" src={bicycleIcon}></img>
+          <img alt="img" className="button" src={bicycleIcon}></img>
         </div>
         <div
           className={"bg-rect" + (!showRoute ? " -opacity-50" : "")}
           onClick={() => setShowRoute(false)}
         >
-          <img className="button" src={noRouteIcon}></img>
+          <img alt="img" className="button" src={noRouteIcon}></img>
         </div>
       </div>
     );
@@ -95,7 +95,7 @@ function App() {
           className="bg-rect"
           onClick={() => setUserDescription(currentUserDescription)}
         >
-          <img className="button" src={sendIcon}></img>
+          <img alt="img" className="button" src={sendIcon}></img>
         </div>
       </div>
     );
@@ -120,6 +120,7 @@ function App() {
       <div className="header">
         <div className="bg-rect main-header">
           <img
+            alt="img"
             className={"button " + c2}
             src={mapIcon}
             onClick={() => {
@@ -128,6 +129,7 @@ function App() {
             }}
           ></img>
           <img
+            alt="img"
             className={"button " + c1}
             src={routeIcon}
             onClick={() => {

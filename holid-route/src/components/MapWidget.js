@@ -114,7 +114,14 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
         map.geoObjects.add(current);
       }
     });
-  }, [position, places, showRoute, routeType]);
+  }, [
+    position,
+    places,
+    showRoute,
+    routeType,
+    position.latitude,
+    position.longitude,
+  ]);
 
   return (
     <>

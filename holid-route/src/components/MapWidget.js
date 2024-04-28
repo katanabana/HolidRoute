@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
 import loaderIcon from "../icons/loader.png";
 
-async function getPlaces(lon, lat, userDescription, setLoading) {
-  let url = "http://localhost:3001";
-  url += `/places?lon=${lon}&lat=${lat}&user_description=${userDescription}`;
-  const respnose = await fetch(url, { mode: "cors" });
-  return await respnose.json();
+async function getPlaces(lon, lat, userDescription) {
+  try {
+    let url = "http://localhost:3001";
+    url += `/places?lon=${lon}&lat=${lat}&user_description=${userDescription}`;
+    const respnose = await fetch(url, { mode: "cors" });
+    return await respnose.json();
+  } catch (error) {
+    return [];
+  }
 }
 
 const MapWidget = ({ showRoute, routeType, userDescription }) => {
   const [places, setPlaces] = useState([]);
-  const [position, setPosition] = useState({ latitude: 0, longitude: 0 });
+  const [position, setPosition] = useState({
+    latitude: 55.7558,
+    longitude: 37.6173,
+  });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -19,27 +26,25 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
       ["complete", "interactive"].includes(document.readyState)
     ) {
       navigator.geolocation.getCurrentPosition(function (position) {
-        setPosition({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
-        if (!userDescription) {
-          setPlaces([]);
-          return;
+        if (position.coords) {
+          setPosition({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
         }
-        setLoading(true);
-        getPlaces(
-          position.coords.longitude,
-          position.coords.latitude,
-          userDescription
-        ).then((data) => {
-          setPlaces(data.slice(0, 10));
-          setLoading(false);
-        });
       });
-    } else {
-      console.log("Geolocation is not available in your browser.");
     }
+    if (!userDescription) {
+      setPlaces([]);
+      return;
+    }
+    setLoading(true);
+    getPlaces(position.longitude, position.latitude, userDescription).then(
+      (data) => {
+        setPlaces(data.slice(0, 10));
+        setLoading(false);
+      }
+    );
   }, [userDescription]);
 
   useEffect(() => {

@@ -21,8 +21,8 @@ app.add_middleware(
 
 
 @app.get("/places")
-def tokenize(lon: float, lat: float):
-    return places_api.get_places(lon, lat)
+def tokenize(lon: float, lat: float, user_description: str):
+    return places_api.get_places(lon, lat, user_description)
 
 
 if __name__ == '__main__':

@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-async function getPlaces(lon, lat) {
-  let url = "http://192.168.1.62:3001";
-  url += `/places?lon=${lon}&lat=${lat}`;
+async function getPlaces(lon, lat, userDescription) {
+  let url = "http://localhost:3001";
+  url += `/places?lon=${lon}&lat=${lat}&user_description=${userDescription}`;
   const respnose = await fetch(url, { mode: "cors" });
   return await respnose.json();
 }
 
-const MapWidget = ({ showRoute, routeType }) => {
+const MapWidget = ({ showRoute, routeType, userDescription }) => {
   const [places, setPlaces] = useState([]);
   const [position, setPosition] = useState({ latitude: 0, longitude: 0 });
 
   useEffect(() => {
+    if (!userDescription) {
+      setPlaces([])
+      return
+    }
     if (
       "geolocation" in navigator &&
       ["complete", "interactive"].includes(document.readyState)
@@ -21,7 +25,7 @@ const MapWidget = ({ showRoute, routeType }) => {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
-        getPlaces(position.coords.longitude, position.coords.latitude).then(
+        getPlaces(position.coords.longitude, position.coords.latitude, userDescription).then(
           (data) => {
             setPlaces(data.slice(0, 10));
           }
@@ -30,7 +34,7 @@ const MapWidget = ({ showRoute, routeType }) => {
     } else {
       console.log("Geolocation is not available in your browser.");
     }
-  }, []);
+  }, [userDescription]);
 
   useEffect(() => {
     window.ymaps.ready(() => {

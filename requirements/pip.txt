@@ -1,3 +1,4 @@
 fastapi
 requests
 uvicorn
+g4f

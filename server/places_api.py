@@ -1,6 +1,7 @@
 from pprint import pprint
 import requests
 from concurrent.futures import ThreadPoolExecutor
+from places_filter import get_places_ids
 
 API_KEY = 'd548c5ed24604be6a9dd0d989631f783'
 CATEGORIES = dict(
@@ -56,14 +57,14 @@ def get_places_by_params(params):
     return places
 
 
-def get_places(lon, lat):
+def get_places(lon, lat, user_description):
     params_list = []
-    n = 9
+    n = 1
     for i in range(0, len(CATEGORIES), n):
         params = dict(
-            categories=list(CATEGORIES.keys())[i:i+n],
+            categories=','.join(list(CATEGORIES.keys())[i:i+n]),
             filter=f'circle:{lon},{lat},50000',
-            limit=n * 3,
+            limit=n * 3 if user_description else n * 1,
             apiKey=API_KEY,
             bias=f'proximity:{lon},{lat}'
         )
@@ -78,4 +79,15 @@ def get_places(lon, lat):
                     places.append(place)
     for i, place in enumerate(places):
         place['id'] = i
-    return places
+    if user_description:
+        proper_ids = get_places_ids(places, user_description)
+        proper_places = []
+        for place in places:
+            if place['id'] in proper_ids:
+                proper_places.append(place)
+    else:
+        proper_places = places
+    return proper_places
+
+from pprint import pprint
+pprint(get_places(60.6454, 56.8431, 'Хочу поесть'))

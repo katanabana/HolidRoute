@@ -1,6 +1,7 @@
 import requests
 from concurrent.futures import ThreadPoolExecutor
 from filter_places import get_places_ids
+import geopy.distance
 
 API_KEY = 'd548c5ed24604be6a9dd0d989631f783'
 
@@ -55,6 +56,9 @@ def get_places(lon, lat, user_description):
         for group in groups_of_places:
             for place in group:
                 if place not in places:
+                    dist = geopy.distance.geodesic((lat, lon), place['coordinates']).m
+                    place['distance_in_meters'] = int(dist)
+                    place.pop('coordinates')
                     places.append(place)
     for i, place in enumerate(places):
         place['id'] = i
@@ -64,6 +68,7 @@ def get_places(lon, lat, user_description):
         for place in places:
             if place['id'] in proper_ids:
                 proper_places.append(place)
+
     else:
         proper_places = places
     return proper_places

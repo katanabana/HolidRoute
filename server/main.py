@@ -1,19 +1,13 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 import uvicorn
-import places_api
+import get_places
 from fastapi.middleware.cors import CORSMiddleware
-
-
-origins = [
-    "http://192.168.1.62:3000",
-    "http://localhost:3000"
-]
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,7 +16,7 @@ app.add_middleware(
 
 @app.get("/places")
 def tokenize(lon: float, lat: float, user_description: str):
-    return places_api.get_places(lon, lat, user_description)
+    return get_places.get_places(lon, lat, user_description)
 
 
 if __name__ == '__main__':

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import loaderIcon from "../icons/loader.png";
+import process from "process"; // Node.js process module imported
 
 async function getPlaces(lon, lat, userDescription) {
   try {
-    let url = "http://localhost:3001";
+    let url = process.env.REACT_APP_API_URL;
     url += `/places?lon=${lon}&lat=${lat}&user_description=${userDescription}`;
-    const respnose = await fetch(url, { mode: "cors" });
+    const respnose = await fetch(url, { mode: "no-cors" });
     return await respnose.json();
   } catch (error) {
     return [];

@@ -82,6 +82,7 @@ function App() {
       </div>
     );
   } else if (showParams) {
+
     footer = (
       <div className="-footer-div">
         <div className="bg-rect -text-area-div">

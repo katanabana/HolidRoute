@@ -6,19 +6,17 @@ from g4f.client import Client
 def get_places_ids(places, user_description):
     context = json.dumps(places, ensure_ascii=False)
     question = f'And requirements for the route: `{user_description}`\n'
-    question += 'Depending on the information about the places, what route should I follow?\n'
+    question += 'Depending on the data about the places and info on the Internet, what route should I follow?\n'
     question += 'Return list of ids of the places I should visit separated with commas, without any other text.'
 
-    content = 'I have the following info about places:\n```\nplaces = ' + context + '```\n' + question
+    content = 'I have the following data about places:\n```\nplaces = ' + context + '```\n' + question
 
-    print(content)
     client = Client()
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": content}],
     )
     ids_s = response.choices[0].message.content
-    print(ids_s)
     if ', ' in ids_s:
         ids_list = ids_s.split(', ')
     else:
@@ -33,6 +31,6 @@ def get_places_ids(places, user_description):
                 ids_s = ids_s.replace(str(i), '')
     if not ids_list:
         for place in places:
-            if place['name'] in ids_s:
+            if 'name' in place and place['name'] in ids_s:
                 ids_list.append(place['id'])
     return ids_list

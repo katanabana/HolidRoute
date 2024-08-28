@@ -1,9 +1,11 @@
+import os
+
+import dotenv
 import requests
 from concurrent.futures import ThreadPoolExecutor
 from filter_places import get_places_ids
-import geopy.distance
 
-API_KEY = 'd548c5ed24604be6a9dd0d989631f783'
+dotenv.load_dotenv()
 
 CATEGORIES = ['activity', 'airport', 'beach', 'camping', 'catering', 'entertainment', 'healthcare', 'leisure',
               'low_emission_zone', 'man_made', 'national_park', 'natural', 'pet', 'political', 'power', 'production',
@@ -22,7 +24,9 @@ def get_places_by_params(params):
             keys_to_getters = {
                 'name': lambda: item['properties']['name'],
                 'coordinates': lambda: item['geometry']['coordinates'][::-1],
-                'categories': lambda: list(set([en.split('.')[0] for en in item['properties']['categories']]))
+                'distance': lambda: item['properties']['distance'],
+                'categories': lambda: list(set([en.split('.')[0] for en in item['properties']['categories']])),
+                'address': lambda: ', '.join([item['properties'][key] for key in ['suburb', 'street', 'housenumber']]),
             }
             place = {}
             for (key, get_value) in keys_to_getters.items():
@@ -45,7 +49,7 @@ def get_places(lon, lat, user_description):
             categories=','.join(list(CATEGORIES)[i:i + n]),
             filter=f'circle:{lon},{lat},50000',
             limit=n * 10 if user_description else n * 1,
-            apiKey=API_KEY,
+            apiKey=os.getenv('API_KEY'),
             bias=f'proximity:{lon},{lat}'
         )
         params_list.append(params)
@@ -56,9 +60,6 @@ def get_places(lon, lat, user_description):
         for group in groups_of_places:
             for place in group:
                 if place not in places:
-                    dist = geopy.distance.geodesic((lat, lon), place['coordinates']).m
-                    place['distance_in_meters'] = int(dist)
-                    place.pop('coordinates')
                     places.append(place)
     for i, place in enumerate(places):
         place['id'] = i

@@ -22,11 +22,12 @@ def get_places_by_params(params):
 
         for item in data:
             keys_to_getters = {
-                'name': lambda: item['properties']['name'],
                 'coordinates': lambda: item['geometry']['coordinates'][::-1],
+                'name': lambda: item['properties']['name'],
                 'distance': lambda: item['properties']['distance'],
-                'categories': lambda: list(set([en.split('.')[0] for en in item['properties']['categories']])),
-                'address': lambda: ', '.join([item['properties'][key] for key in ['suburb', 'street', 'housenumber']]),
+                'categories': lambda: item['properties']['categories'],
+                'address': lambda: item['properties']['formatted'],
+                'website': lambda: item['properties']['website']
             }
             place = {}
             for (key, get_value) in keys_to_getters.items():
@@ -64,10 +65,14 @@ def get_places(lon, lat, user_description):
     for i, place in enumerate(places):
         place['id'] = i
     if user_description:
-        proper_ids = get_places_ids(places, user_description)
+        proper_ids_and_names = get_places_ids(places, user_description)
+        ids_to_names = {}
+        for place in proper_ids_and_names:
+            ids_to_names[place['id']] = place['name']
         proper_places = []
         for place in places:
-            if place['id'] in proper_ids:
+            if place['id'] in ids_to_names.keys():
+                place['name'] = ids_to_names[place['id']]
                 proper_places.append(place)
 
     else:

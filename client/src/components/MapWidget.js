@@ -6,7 +6,7 @@ async function getPlaces(lon, lat, userDescription) {
   try {
     let url = process.env.REACT_APP_API_URL;
     url += `/places?lon=${lon}&lat=${lat}&user_description=${userDescription}`;
-    const respnose = await fetch(url, { mode: "no-cors" });
+    const respnose = await fetch(url, { mode: "cors" });
     return await respnose.json();
   } catch (error) {
     return [];
@@ -88,8 +88,7 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
         for (const place of places) {
           const marker = new window.ymaps.Placemark(place.coordinates, {
             hintContent:
-              (place.name ? place.name + " " : "") +
-              (place.categories ? `(${place.categories.join()})` : ""),
+              place.name ? place.name + " " : ""
           });
 
           map.geoObjects.add(marker);

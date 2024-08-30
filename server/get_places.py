@@ -68,11 +68,12 @@ def get_places(lon, lat, user_description):
         proper_ids_and_names = get_places_ids(places, user_description)
         ids_to_names = {}
         for place in proper_ids_and_names:
-            ids_to_names[place['id']] = place['name']
+            ids_to_names[place['id']] = place['name'], place['description']
         proper_places = []
         for place in places:
             if place['id'] in ids_to_names.keys():
-                place['name'] = ids_to_names[place['id']]
+                place['name'] = ids_to_names[place['id']][0]
+                place['description'] = ids_to_names[place['id']][1]
                 proper_places.append(place)
 
     else:

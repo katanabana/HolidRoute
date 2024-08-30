@@ -51,7 +51,7 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
 
         const map = new window.ymaps.Map("map", {
           center: [latitude, longitude],
-          zoom: 13,
+          zoom: 12,
         });
 
         const routeCoordinates = [];
@@ -85,11 +85,38 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
           map.geoObjects.add(route);
         }
 
+        // Define a custom balloon layout
+        const CustomBalloonLayout =
+          window.ymaps.templateLayoutFactory.createClass(
+            // HTML structure of the balloon
+            `<div class="custom-balloon">
+    <div class="balloon-title">{{ properties.balloonContentHeader }}</div>
+    <div class="balloon-description">{{ properties.balloonContentBody }}</div>
+  </div>`,
+            {
+              // You can add functions for interactivity if needed, e.g., onAdd, onRemove
+            }
+          );
+
+          const CustomHintLayout = CustomBalloonLayout
+
+        // Adding placemarks with the custom balloon
         for (const place of places) {
-          const marker = new window.ymaps.Placemark(place.coordinates, {
-            hintContent:
-              place.name ? place.name + " " : ""
-          });
+          const marker = new window.ymaps.Placemark(
+            place.coordinates,
+            {
+              // Define properties to be used in the custom balloon
+              balloonContentHeader: place.name ? place.name : "",
+              balloonContentBody: place.description ? place.description : "", // Add a description or any other custom property
+            },
+            {
+              balloonLayout: CustomBalloonLayout, // Use the custom balloon layout
+              hideIconOnBalloonOpen: false, // Keeps the icon visible when balloon is open
+              openBalloonOnClick: true, // Ensures the balloon opens on click
+              openBalloonOnHover: true,
+              hintLayout: CustomHintLayout,
+            }
+          );
 
           map.geoObjects.add(marker);
         }

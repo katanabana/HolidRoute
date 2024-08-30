@@ -20,4 +20,4 @@ def tokenize(lon: float, lat: float, user_description: str):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, port=3001, host='0.0.0.0')
+    uvicorn.run(app, port=443, host='0.0.0.0', ssl_keyfile='key.pem', ssl_certfile='cert.pem')

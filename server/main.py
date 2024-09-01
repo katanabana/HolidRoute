@@ -1,7 +1,12 @@
+import os
+
+from dotenv import load_dotenv
 from fastapi import FastAPI
 import uvicorn
 import get_places
 from fastapi.middleware.cors import CORSMiddleware
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -20,4 +25,10 @@ def tokenize(lon: float, lat: float, user_description: str):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, port=443, host='0.0.0.0', ssl_keyfile='key.pem', ssl_certfile='cert.pem')
+    uvicorn.run(
+        app,
+        port=int(os.getenv('port')),
+        host=os.getenv('host'),
+        ssl_keyfile=os.getenv("ssl_key"),
+        ssl_certfile=os.getenv("ssl_cert")
+    )

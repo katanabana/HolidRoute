@@ -98,7 +98,7 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
             }
           );
 
-          const CustomHintLayout = CustomBalloonLayout
+        const CustomHintLayout = CustomBalloonLayout;
 
         // Adding placemarks with the custom balloon
         for (const place of places) {

@@ -50,7 +50,7 @@ def get_places(lon, lat, user_description):
             categories=','.join(list(CATEGORIES)[i:i + n]),
             filter=f'circle:{lon},{lat},50000',
             limit=n * 10 if user_description else n * 1,
-            apiKey=os.getenv('API_KEY'),
+            apiKey=os.getenv('GEOAPIFY_API_KEY'),
             bias=f'proximity:{lon},{lat}'
         )
         params_list.append(params)

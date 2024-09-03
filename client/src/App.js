@@ -7,7 +7,7 @@ import carIcon from "./icons/car.png";
 import busIcon from "./icons/bus.png";
 import bicycleIcon from "./icons/bicycle.png";
 import sendIcon from "./icons/send.png";
-import MapWidget from "./components/MapWidget.js";
+import MapWidget from "./MapWidget.js";
 import { useState } from "react";
 
 function App() {

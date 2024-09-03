@@ -101,7 +101,10 @@ Below are the details on how to set them up.
 ### server/.env
 
 ```plaintext
-# Your or public Geoapify API key.
+# Domain where frontend is hosted (being served from)
+FRONTEND_URL=https://localhost:3000
+
+# Your or public Geoapify API key (the key below is public)
 GEOAPIFY_API_KEY=d548c5ed24604be6a9dd0d989631f783
 
 # The port on which the backend server will run.
@@ -121,7 +124,7 @@ SSL_CERT=cert.pem
 
 ```plaintext
 # The URL of the backend server.
-REACT_APP_API_URL=https://localhost:5000
+REACT_APP_BACKEND_URL=https://localhost:5000
 
 # Enforce HTTPS for precise location detection.
 HTTPS=true

@@ -8,7 +8,8 @@ import busIcon from "./icons/bus.png";
 import bicycleIcon from "./icons/bicycle.png";
 import sendIcon from "./icons/send.png";
 import MapWidget from "./MapWidget.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import process from "process"; // Node.js process module imported
 
 function App() {
   const [showRoute, setShowRoute] = useState(false);
@@ -20,6 +21,22 @@ function App() {
 
   const [showMain, setShowMain] = useState(false);
   const [showParams, setShowParams] = useState(true);
+
+  useEffect(() => {
+    const wakeUpServer = async () => {
+      try {
+        const response = await fetch(process.env.REACT_APP_BACKEND_URL, {
+          mode: "cors",
+        });
+        const data = await response.json();
+        console.log(data.message);
+      } catch (error) {
+        console.error("Failed to contact the server", error);
+      }
+    };
+
+    wakeUpServer();
+  }, []);
 
   let footer = <div></div>;
   if (showMain) {

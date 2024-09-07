@@ -32,8 +32,8 @@ def tokenize(lon: float, lat: float, user_description: str):
 if __name__ == '__main__':
     uvicorn.run(
         app,
-        port=int(os.getenv('port')),
-        host=os.getenv('host'),
-        ssl_keyfile=os.getenv("ssl_key"),
-        ssl_certfile=os.getenv("ssl_cert")
+        port=int(os.getenv('PORT')),
+        host=os.getenv('HOST'),
+        ssl_keyfile=os.getenv("SSL_KEY"),
+        ssl_certfile=os.getenv("SSL_CERT")
     )

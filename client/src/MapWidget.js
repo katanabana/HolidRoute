@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import loaderIcon from "./icons/loader.png";
 import process from "process"; // Node.js process module imported
-import useKeyboardStatus from "./useKeyboardStatus";
 
 async function getPlaces(lon, lat, userDescription) {
   try {
@@ -19,7 +18,6 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
   const [latitude, setLatitude] = useState(55.7558);
   const [longitude, setLongitude] = useState(37.6173);
   const [loading, setLoading] = useState(false);
-  const isKeyboardOpen = useKeyboardStatus();
 
   useEffect(() => {
     if (
@@ -141,12 +139,7 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
 
   return (
     <>
-      <div
-        id="map"
-        className={
-          (loading ? " blur" : "") + (isKeyboardOpen ? " keyboard-open" : "")
-        }
-      >
+      <div id="map" className={loading ? " blur" : ""}>
         {" "}
         <img
           alt="img"

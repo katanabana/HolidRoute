@@ -114,14 +114,13 @@ select {
 
 .footer {
   display: flex;
-  gap: 1em;
   justify-content: space-between;
   flex-grow: 1;
 }
 
 .routes {
   display: flex;
-  gap: 1em;
+  gap: min(1em, calc((100vw - 5 * 4em) / 4));
 }
 
 textarea {
@@ -213,7 +212,7 @@ textarea {
   }
 
   h1 {
-    font-size: 2.7em;
+    font-size: 2.5em;
   }
 }
 

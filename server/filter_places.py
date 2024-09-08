@@ -101,7 +101,7 @@ async def get_places_ids(places, user_description):
     question += 'to fit route requirements?\n'
     question += "If the route requirements don't say to go to multiple places, return a list of length 1.\n"
     question += "The output json dictionaries should include brief descriptions of the places to visit in the language "
-    question += "of the route requirements, not the language of the region where the places are located. "
+    question += "of the requirements for the route (not always english or the language of the region where the places are located). "
     question += "Each description should include the reason why you think the place fits the route requirements.\n"
     question += 'Return only a json list consisting of dictionaries in the following format:\n'
     question += '`[{"id": id, "name": name, "description": brief_description_of_the_place}, ...]`'

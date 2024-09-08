@@ -20,16 +20,16 @@ app.add_middleware(
 
 
 @app.get("/")
-def root():
+async def root():
     return {"message": "connected to api successfully"}
 
 
 @app.get("/places")
-def tokenize(lon: float, lat: float, user_description: str):
-    return get_places.get_places(lon, lat, user_description)
+async def tokenize(lon: float, lat: float, user_description: str):
+    return await get_places.get_places(lon, lat, user_description)
 
 
-if __name__ == '__main__':
+def main():
     uvicorn.run(
         app,
         port=int(os.getenv('PORT')),
@@ -37,3 +37,7 @@ if __name__ == '__main__':
         ssl_keyfile=os.getenv("SSL_KEY"),
         ssl_certfile=os.getenv("SSL_CERT")
     )
+
+
+if __name__ == '__main__':
+    main()

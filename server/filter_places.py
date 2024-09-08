@@ -1,58 +1,97 @@
 import json
+import asyncio
+import time
+from asyncio import WindowsSelectorEventLoopPolicy
 
-from g4f.client import Client
-import os
-import subprocess
+from g4f import Provider
+from g4f.client import AsyncClient
 
-CHROME_PATH = None
+asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())
 
+PROVIDERS_TO_MODELS = {
+    None: 'gpt-4o',
+    Provider.OpenaiChat: 'gpt-4o',
+    Provider.Liaobots: 'gpt-4o',
+    Provider.Bing: 'gpt-4o',
+    Provider.Chatgpt4o: 'gpt-4o',
+    Provider.Theb: 'gpt-4o',
+    Provider.You: 'gpt-4o',
+    Provider.HuggingChat: 'command-r+',
+    Provider.Llama: 'llama-3-70b',
+    Provider.DeepInfra: 'llama-3-70b',
+    Provider.Reka: 'reka-core',
+}
 
-def install_chrome():
-    """Installs Chrome via apt-get if it's not installed."""
-    print("Installing Google Chrome...")
-
-    # Update package list and install Chrome dependencies
-    subprocess.run(['apt-get', 'update'], check=True)
-    subprocess.run(['apt-get', 'install', '-y', 'wget', 'gnupg', 'unzip'], check=True)
-
-    # Add Google Chrome's GPG key and repository
-    subprocess.run(['wget', '-q', '-O', '-', 'https://dl.google.com/linux/linux_signing_key.pub'], check=True)
-    subprocess.run(['apt-key', 'add', '-'], check=True)
-    subprocess.run(['sh', '-c',
-                    'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> '
-                    '/etc/apt/sources.list.d/google-chrome.list'],
-                   check=True)
-
-    # Install Google Chrome
-    subprocess.run(['apt-get', 'update'], check=True)
-    subprocess.run(['apt-get', 'install', '-y', 'google-chrome-stable'], check=True)
+TIMEOUT_SECONDS = 30  # Set timeout for test requests
 
 
-def test_g4f():
-    """Attempts to create a g4f client, installing Chrome if necessary."""
-    try:
-        # First, try to create the client without specifying a browser path
-        client = Client()
-        response = client.chat.completions.create(prompt="Say something cool")
-        print(response)
-    except FileNotFoundError:
-        print("Chrome not found. Installing Chrome...")
+async def get_test_response_info(provider, semaphore):
+    async with semaphore:
+        try:
+            start_time = time.time()
+            response = await asyncio.wait_for(
+                get_g4f_response('say "test"', provider, PROVIDERS_TO_MODELS[provider]),
+                timeout=TIMEOUT_SECONDS
+            )
+            success = True
+        except asyncio.TimeoutError:
+            response = 'Request timed out'
+            success = False
+        except Exception as ex:
+            response = str(ex)
+            success = False
 
-        # If Chrome is not installed, install it
-        install_chrome()
-
-        # Re-initialize the client with the correct browser path after installation
-        global CHROME_PATH
-        CHROME_PATH = '/usr/bin/google-chrome'
-        client = Client(browser_executable_path=CHROME_PATH)
-        response = client.chat.completions.create(prompt="Say something cool")
-        print(response)
-
-
-test_g4f()
+        response_time = time.time() - start_time
+        return provider, PROVIDERS_TO_MODELS[provider], response_time, response, success
 
 
-def get_places_ids(places, user_description):
+async def get_best_provider():
+    print('\nSearching for the best provider...')
+    semaphore = asyncio.Semaphore(2)  # Limit concurrent tasks
+    tasks = [get_test_response_info(provider, semaphore) for provider in PROVIDERS_TO_MODELS]
+
+    # Process results concurrently, but with limited concurrency
+    results = await asyncio.gather(*tasks)
+
+    best_provider = False
+    fastest_time = float('inf')
+
+    for result in results:
+        provider, model, response_time, response, success = result
+
+        print(f'''
+        Provider: {provider.__name__ if hasattr(provider, '__name__') else provider}
+        Model: {model}
+        Response time: {response_time:.2f}s
+        Response: {response}
+        Success: {success}
+        ''')
+
+        if success and response_time < fastest_time:
+            fastest_time = response_time
+            best_provider = provider
+
+    if best_provider:
+        name = best_provider.__name__ if hasattr(best_provider, "__name__") else best_provider
+        print(f'Best provider: {name}, Model: {PROVIDERS_TO_MODELS[best_provider]}\n')
+        return best_provider
+    else:
+        print('No provider succeeded.')
+        return
+
+
+async def get_g4f_response(prompt, provider, model):
+    client = AsyncClient(provider=provider)
+    messages = [{"role": "user", "content": prompt}]
+    response = await client.chat.completions.create(model=model, messages=messages)
+    return response.choices[0].message.content
+
+
+# Run the provider selection
+BEST_PROVIDER = asyncio.run(get_best_provider())
+
+
+async def get_places_ids(places, user_description):
     context = json.dumps(places, ensure_ascii=False)
     question = f'Requirements for the route: `{user_description}`\n'
     question += 'Depending on the data about the places and info on the Internet, what route should I follow '
@@ -64,16 +103,9 @@ def get_places_ids(places, user_description):
     question += 'Return only a json list consisting of dictionaries in the following format:\n'
     question += '`[{"id": id, "name": name, "description": brief_description_of_the_place}, ...]`'
 
-    content = 'I have the following data about places:\n```\nplaces = ' + context + '```\n' + question
-    if CHROME_PATH is None:
-        client = Client()
-    else:
-        client = Client(browser_executable_path=CHROME_PATH)
-    response = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[{"role": "user", "content": content}],
-    )
-    answer = response.choices[0].message.content
+    prompt = 'I have the following data about places:\n```\nplaces = ' + context + '```\n' + question
+
+    answer = await get_g4f_response(prompt, BEST_PROVIDER, PROVIDERS_TO_MODELS[BEST_PROVIDER])
     answer = answer[answer.find('['):]
     answer = answer[:answer.rfind(']') + 1]
     return json.loads(answer)

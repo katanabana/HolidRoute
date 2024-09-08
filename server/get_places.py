@@ -42,7 +42,7 @@ def get_places_by_params(params):
     return places
 
 
-def get_places(lon, lat, user_description):
+async def get_places(lon, lat, user_description):
     params_list = []
     n = 1
     for i in range(0, len(CATEGORIES), n):
@@ -65,7 +65,7 @@ def get_places(lon, lat, user_description):
     for i, place in enumerate(places):
         place['id'] = i
     if user_description:
-        proper_ids_and_names = get_places_ids(places, user_description)
+        proper_ids_and_names = await get_places_ids(places, user_description)
         ids_to_names = {}
         for place in proper_ids_and_names:
             ids_to_names[place['id']] = place['name'], place['description']

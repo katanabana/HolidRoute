@@ -1,5 +1,9 @@
 # HolidRoute
 
+URL of the published version: https://holidroute.netlify.app
+
+![HolidRoute Demo](demo.gif)
+
 This project is a web application that allows users to enter their route preferences, and based on their location, it
 finds nearby places using the Geoapify API. The relevant places are filtered using g4f to match the user's preferences
 and are displayed on a map. Users can also explore different transportation options.

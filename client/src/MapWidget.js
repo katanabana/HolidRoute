@@ -15,8 +15,8 @@ async function getPlaces(lon, lat, userDescription) {
 
 const MapWidget = ({ showRoute, routeType, userDescription }) => {
   const [places, setPlaces] = useState([]);
-  const [latitude, setLatitude] = useState(55.7558);
-  const [longitude, setLongitude] = useState(37.6173);
+  const [latitude, setLatitude] = useState(40.7685);
+  const [longitude, setLongitude] = useState(-73.9822);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const MapWidget = ({ showRoute, routeType, userDescription }) => {
 
         const map = new window.ymaps.Map("map", {
           center: [latitude, longitude],
-          zoom: 12,
+          zoom: 13,
         });
 
         const routeCoordinates = [];

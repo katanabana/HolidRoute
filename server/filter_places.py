@@ -1,12 +1,15 @@
 import json
 import asyncio
+import sys
 import time
-from asyncio import WindowsSelectorEventLoopPolicy
 
 from g4f import Provider
 from g4f.client import AsyncClient
 
-asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())
+if sys.platform == "win32":
+    from asyncio import WindowsSelectorEventLoopPolicy
+
+    asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())
 
 PROVIDERS_TO_MODELS = {
     None: 'gpt-4o',

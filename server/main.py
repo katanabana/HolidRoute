@@ -30,7 +30,7 @@ async def tokenize(lon: float, lat: float, user_description: str):
 
 
 def main():
-    if os.path.isfile(os.getenv("SSL_KEY")) and os.path.isfile(os.getenv("SSL_CERT")):
+    if os.getenv("SSL_KEY") is not None and os.path.isfile(os.getenv("SSL_KEY")) and os.getenv("SSL_CERT") is not None and os.path.isfile(os.getenv("SSL_CERT")):
         uvicorn.run(
             app,
             port=int(os.getenv('PORT')),

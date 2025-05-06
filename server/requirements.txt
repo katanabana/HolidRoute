@@ -1,10 +1,5 @@
 fastapi==0.114.0
-g4f==0.3.2.6
 python-dotenv==1.0.1
-Requests==2.32.3
+requests==2.32.3
 uvicorn==0.30.6
-# packages for g4f to work:
-curl_cffi==0.7.1
-browser_cookie3==0.19.1
-nodriver==0.37
-g4f[webdriver]
+httpx==0.28.1
